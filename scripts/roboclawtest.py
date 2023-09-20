@@ -15,5 +15,5 @@ if __name__ == "__main__":
     roboclaw = Roboclaw("/dev/serial0", 115200)
     roboclaw.Open()
 
-    print roboclaw.ReadVersion(address)
-    print roboclaw.ReadEncM1(address)
+    print(roboclaw.ReadVersion(address))
+    print(roboclaw.ReadEncM1(address))
