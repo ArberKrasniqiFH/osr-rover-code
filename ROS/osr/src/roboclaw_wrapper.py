@@ -165,7 +165,7 @@ class RoboclawWrapper(object):
 
     def setup_encoders(self):
         """Set up the encoders"""
-        for motor_name, properties in self.roboclaw_mapping.iteritems():
+        for motor_name, properties in self.roboclaw_mapping.items():
             if "corner" in motor_name:
                 enc_min, enc_max = self.read_encoder_limits(properties["address"], properties["channel"])
                 self.encoder_limits[motor_name] = (enc_min, enc_max)
@@ -177,7 +177,7 @@ class RoboclawWrapper(object):
         """Query roboclaws and update current motors status in encoder ticks"""
         enc_msg = JointState()
         enc_msg.header.stamp = rospy.Time.now()
-        for motor_name, properties in self.roboclaw_mapping.iteritems():
+        for motor_name, properties in self.roboclaw_mapping.items():
             enc_msg.name.append(motor_name)
             position = self.read_encoder_position(properties["address"], properties["channel"])
             velocity = self.read_encoder_velocity(properties["address"], properties["channel"])
