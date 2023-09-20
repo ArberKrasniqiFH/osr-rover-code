@@ -86,8 +86,8 @@ class Rover(object):
         self.drive_cmd_pub.publish(drive_cmd_msg)
 
     def enc_cb(self, msg):
-        self.curr_positions = dict(zip(msg.name, msg.position))
-        self.curr_velocities = dict(zip(msg.name, msg.velocity))
+        self.curr_positions = dict(list(zip(msg.name, msg.position)))
+        self.curr_velocities = dict(list(zip(msg.name, msg.velocity)))
         if self.should_calculate_odom:
             # measure how much time has elapsed since our last update
             now = rospy.Time.now()
