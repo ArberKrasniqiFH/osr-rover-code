@@ -3,6 +3,8 @@
 import rospy
 import math
 import tf2_ros
+import pygame
+import os
 
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import Twist, TwistWithCovariance, TransformStamped
@@ -85,7 +87,33 @@ class Rover(object):
             self.corner_cmd_pub.publish(corner_cmd_msg)
         self.drive_cmd_pub.publish(drive_cmd_msg)
 
+    def play_music(music_file, volume=0.8, ):
+        #set up the mixer
+        freq = 44100 #audio CD quality
+        bitsize = -16 #unsigned 16 bit
+        channels = 2 #1 is mono, 2 is stereo
+        buffer = 2048 #number of samples (experiment to get best sound)
+        pygame.mixer.init(freq, bitsize, channels, buffer)
+        #volume value 0.0 to 1.0
+        pygame.mixer.music.set_volume(volume)
+        clock = pygame.time.Clock()
+        try:
+                pygame.mixer.music.load(music_file)
+                print("Music file loaded!")
+        except pygame.error:
+                print("File not found!")
+                return
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+                #check if playback has finished
+                clock.tick(30)
+
+    music_file = "metalpipe.mp3"
+
+    volume = 1.0
+    
     def enc_cb(self, msg):
+        play_music(music_file, volume)
         self.curr_positions = dict(list(zip(msg.name, msg.position)))
         self.curr_velocities = dict(list(zip(msg.name, msg.velocity)))
         if self.should_calculate_odom:
