@@ -50,6 +50,8 @@ class Rover(object):
         rospy.Subscriber("/cmd_vel", Twist, self.cmd_cb, callback_args=False)
         rospy.Subscriber("/cmd_vel_intuitive", Twist, self.cmd_cb, callback_args=True)
         rospy.Subscriber("/encoder", JointState, self.enc_cb)
+        
+        rospy.Subscriber("/encoder", JointState, self.play_music)
 
     def cmd_cb(self, twist_msg, intuitive=False):
         """
@@ -87,7 +89,7 @@ class Rover(object):
             self.corner_cmd_pub.publish(corner_cmd_msg)
         self.drive_cmd_pub.publish(drive_cmd_msg)
 
-    def play_music(music_file, volume=0.8, ):
+    def play_music(music_file = metalpipe.mp3, volume=0.8):
         #set up the mixer
         freq = 44100 #audio CD quality
         bitsize = -16 #unsigned 16 bit
@@ -108,12 +110,8 @@ class Rover(object):
                 #check if playback has finished
                 clock.tick(30)
 
-    music_file = "metalpipe.mp3"
-
-    volume = 1.0
     
     def enc_cb(self, msg):
-        play_music(music_file, volume)
         self.curr_positions = dict(list(zip(msg.name, msg.position)))
         self.curr_velocities = dict(list(zip(msg.name, msg.velocity)))
         if self.should_calculate_odom:
