@@ -1,0 +1,39 @@
+import pygame
+import os
+import rospy
+import math
+
+from sensor_msgs.msg import JointState
+rospy.Subscriber("/encoder", JointState, self.enc_cb)
+
+ def __init__(self):
+        rospy.init_node('your_node_name')
+        rospy.Subscriber("/encoder", JointState, self.enc_cb)
+        self.initialize_mixer()
+   
+def play_music(music_file, volume=0.8,self):
+        #set up the mixer
+        freq = 44100 #audio CD quality
+        bitsize = -16 #unsigned 16 bit
+        channels = 2 #1 is mono, 2 is stereo
+        buffer = 2048 #number of samples (experiment to get best sound)
+        pygame.mixer.init(freq, bitsize, channels, buffer)
+        #volume value 0.0 to 1.0
+        pygame.mixer.music.set_volume(volume)
+        clock = pygame.time.Clock()
+        try:
+                pygame.mixer.music.load(music_file)
+                print("Music file loaded!")
+        except pygame.error:
+                print("File not found!")
+                return
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+                #check if playback has finished
+                clock.tick(30)
+
+music_file = "drivingsound.mp3"
+
+volume = 1.0
+
+play_music(music_file, volume)
